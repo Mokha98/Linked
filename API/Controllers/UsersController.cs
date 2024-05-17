@@ -1,18 +1,19 @@
 ﻿using API.Data;
+using API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class UsersController:ControllerBase
+[Authorize]
+public class UsersController:APIBaseController
 {
     private readonly DataContext _dbContext;
-    public UsersController(DataContext dbContext)
+    public UsersController(DataContext dbContext, ITokenService tokenService)
     {
-        _dbContext = dbContext;
+        _dbContext = dbContext;     
     }
 
     [HttpGet]
@@ -28,5 +29,7 @@ public class UsersController:ControllerBase
         var users = await _dbContext.AppUsers.FindAsync(id);
         return users;
     }
+
+    
 
 }
